@@ -48,7 +48,9 @@ if (process.env.CORS) {
 }
 
 // Initialize routes middleware
-app.use('/api/users', require('./routes/users'));
+app.use('/api/clients', require('./routes/clients'));
+app.use('/api/vehicles', require('./routes/vehicles'));
+app.use('/api/activities', require('./routes/activities'));
 
 // Use express's default error handling middleware
 app.use((err, req, res, next) => {
@@ -57,7 +59,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3200;
 
 const server = app.listen(port, () => {
   console.log(`Listening on port ${port}`);

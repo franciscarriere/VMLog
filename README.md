@@ -45,7 +45,7 @@ For the **back-end**, install the dependencies once via the terminal.
 npm install
 ```
 
-Run the *main server*. It listens on port 3000.
+Run the *main server*. It listens on port 3200.
 ```bash
 CORS=1 node server
 ```
@@ -66,7 +66,7 @@ npm install
 
 Run the *development server* for React. It listens on port 4200.
 ```bash
-REACT_APP_API_URL=http://localhost:3000 npm start
+REACT_APP_API_URL=http://localhost:3200 npm start
 ```
 
 To make a production build, simply run on *react-src* folder via the terminal.

@@ -21,7 +21,7 @@ Thank you for considering contributing to this little project!
 
 ## Fork, then clone the repo.
 ```bash
-git clone https://github.com/<your-user-name>/mern-crud.git
+git clone https://github.com/franciscarriere/vmlog.git
 ```
 
 ## Commit

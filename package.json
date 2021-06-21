@@ -1,5 +1,5 @@
 {
-  "name": "mern-crud",
+  "name": "vmlog",
   "version": "0.1.0",
   "description": "A simple records system using MongoDB, Express.js, React.js, and Node.js with real-time CRUD operations using Socket.io",
   "main": "server.js",

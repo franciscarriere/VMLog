@@ -3,12 +3,10 @@ import { Container } from 'semantic-ui-react';
 import axios from 'axios';
 import io from 'socket.io-client';
 
-import TableUser from '../TableUser/TableUser';
-import ModalUser from '../ModalUser/ModalUser';
-
-import logo from '../../logo.svg';
-import shirts from '../../shirts.png';
-import './App.css';
+import Header from '../Header/Header';
+import TableClient from '../Client/TableClient';
+import ModalClient from '../Client/ModalClient';
+import ModalActivity from '../Activity/ModalActivity';
 
 class App extends Component {
 
@@ -19,61 +17,65 @@ class App extends Component {
     this.socket = io.connect(this.server);
 
     this.state = {
-      users: [],
+      clients: [],
       online: 0
     }
 
-    this.fetchUsers = this.fetchUsers.bind(this);
-    this.handleUserAdded = this.handleUserAdded.bind(this);
-    this.handleUserUpdated = this.handleUserUpdated.bind(this);
-    this.handleUserDeleted = this.handleUserDeleted.bind(this);
+    this.fetchClients = this.fetchClients.bind(this);
+    this.handleClientAdded = this.handleClientAdded.bind(this);
+    this.handleClientUpdated = this.handleClientUpdated.bind(this);
+    this.handleClientDeleted = this.handleClientDeleted.bind(this);
   }
 
   // Place socket.io code inside here
   componentDidMount() {
-    this.fetchUsers();
+    this.fetchClients();
     this.socket.on('visitor enters', data => this.setState({ online: data }));
     this.socket.on('visitor exits', data => this.setState({ online: data }));
-    this.socket.on('add', data => this.handleUserAdded(data));
-    this.socket.on('update', data => this.handleUserUpdated(data));
-    this.socket.on('delete', data => this.handleUserDeleted(data));
+    this.socket.on('add', data => this.handleClientAdded(data));
+    this.socket.on('update', data => this.handleClientUpdated(data));
+    this.socket.on('delete', data => this.handleClientDeleted(data));
   }
 
   // Fetch data from the back-end
-  fetchUsers() {
-    axios.get(`${this.server}/api/users/`)
+  fetchClients() {
+    axios.get(`${this.server}/api/clients/`)
     .then((response) => {
-      this.setState({ users: response.data });
+      this.setState({ clients: response.data });
     })
     .catch((err) => {
       console.log(err);
     });
   }
 
-  handleUserAdded(user) {
-    let users = this.state.users.slice();
-    users.push(user);
-    this.setState({ users: users });
+  handleClientAdded(client) {
+    let clients = this.state.clients.slice();
+    clients.push(client);
+    this.setState({ clients: clients });
   }
 
-  handleUserUpdated(user) {
-    let users = this.state.users.slice();
-    for (let i = 0, n = users.length; i < n; i++) {
-      if (users[i]._id === user._id) {
-        users[i].name = user.name;
-        users[i].email = user.email;
-        users[i].age = user.age;
-        users[i].gender = user.gender;
+  handleClientUpdated(client) {
+    let clients = this.state.clients.slice();
+    for (let i = 0, n = clients.length; i < n; i++) {
+      if (clients[i]._id === client._id) {
+        clients[i].name = client.name;
+        clients[i].email = client.email;
+        clients[i].age = client.age;
+        clients[i].gender = client.gender;
         break; // Stop this loop, we found it!
       }
     }
-    this.setState({ users: users });
+    this.setState({ clients: clients });
   }
 
-  handleUserDeleted(user) {
-    let users = this.state.users.slice();
-    users = users.filter(u => { return u._id !== user._id; });
-    this.setState({ users: users });
+  handleClientDeleted(client) {
+    let clients = this.state.clients.slice();
+    clients = clients.filter(c => { return c._id !== client._id; });
+    this.setState({ clients: clients });
+  }
+
+  handleActivityAdded(activity) {
+    
   }
 
   render() {
@@ -84,36 +86,32 @@ class App extends Component {
 
     return (
       <div>
-        <div className='App'>
-          <div className='App-header'>
-            <img src={logo} className='App-logo' alt='logo' />
-            <h1 className='App-intro'>MERN CRUD</h1>
-            <p>A simple records system using MongoDB, Express.js, React.js, and Node.js with real-time Create, Read, Update, and Delete operations using Socket.io.</p>
-            <p>REST API was implemented on the back-end. Semantic UI React was used for the UI.</p>
-            <p>
-              <a className='social-link' href='https://github.com/cefjoeii' target='_blank' rel='noopener noreferrer'>GitHub</a> &bull; <a className='social-link' href='https://linkedin.com/in/cefjoeii' target='_blank' rel='noopener noreferrer'>LinkedIn</a> &bull; <a className='social-link' href='https://twitter.com/cefjoeii' target='_blank' rel='noopener noreferrer'>Twitter</a>
-            </p>
-            <a className='shirts' href='https://www.teepublic.com/user/codeweario' target='_blank' rel='noopener noreferrer'>
-              <img src={shirts} alt='Programmer Shirts' />
-              <span>Ad</span>
-            </a>
-          </div>
-        </div>
+        <Header/>
         <Container>
-          <ModalUser
-            headerTitle='Add User'
-            buttonTriggerTitle='Add New'
-            buttonSubmitTitle='Add'
-            buttonColor='green'
-            onUserAdded={this.handleUserAdded}
+        <h2>Quick Actions</h2>
+        <ModalActivity
+            headerTitle='Log Work'
+            buttonTriggerTitle='Log Work'
+            buttonSubmitTitle='Submit'
+            buttonColor='grey'
+            onActivityAdded={this.handleActivityAdded}
             server={this.server}
             socket={this.socket}
           />
-          <em id='online'>{`${online} ${noun} ${verb} online.`}</em>
-          <TableUser
-            onUserUpdated={this.handleUserUpdated}
-            onUserDeleted={this.handleUserDeleted}
-            users={this.state.users}
+        <h2>Clients</h2>
+          <ModalClient
+            headerTitle='Add Client'
+            buttonTriggerTitle='+ Client'
+            buttonSubmitTitle='Add'
+            buttonColor='green'
+            onClientAdded={this.handleClientAdded}
+            server={this.server}
+            socket={this.socket}
+          />
+          <TableClient
+            onClientUpdated={this.handleClientUpdated}
+            onClientDeleted={this.handleClientDeleted}
+            clients={this.state.clients}
             server={this.server}
             socket={this.socket}
           />

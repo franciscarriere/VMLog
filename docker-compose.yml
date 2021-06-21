@@ -4,12 +4,12 @@ services:
     image: mongo:latest
   api:
     build: .
-    image: mern-crud
+    image: vmlog
     command: nodemon server
     ports:
-      - "3000:3000"
+      - "3200:3200"
     environment:
-      - "DB=mongodb://db/mern-crud"
+      - "DB=mongodb://db/vmlog"
       - "CORS=1"
       - "DEBUG=express:*"
     volumes:
@@ -18,12 +18,12 @@ services:
     depends_on:
       - db
   web:
-    image: mern-crud
+    image: vmlog
     command: npm start --prefix react-src
     ports:
       - "4200:4200"
     environment:
-      - "REACT_APP_API_URL=http://localhost:3000"
+      - "REACT_APP_API_URL=http://localhost:3200"
     volumes:
       - ./react-src:/usr/src/app/react-src
       - /usr/src/app/react-src/node_modules

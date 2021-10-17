@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Message, Button, Form, Select, TextArea } from 'semantic-ui-react';
+import { Message, Button, Form, Select, TextArea, Divider, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import io from 'socket.io-client';
 import AttachmentInput from '../Attachments/AttachmentInput';
@@ -17,6 +17,7 @@ class FormActivity extends Component {
       vehicle: '',
       kilometrage: 0,
       log: '',
+      attachments: [],
 
       clientOptions: [],
       isLoadingClient: false,
@@ -42,6 +43,7 @@ class FormActivity extends Component {
           vehicle: response.data.vehicle._id,
           kilometrage: response.data.kilometrage,
           log: response.data.log,
+          attachments: response.data.attachments,
         }, () => {
           this.fetchClient();
           this.fetchVehiclesForClient();
@@ -118,6 +120,14 @@ class FormActivity extends Component {
     this.setState({ vehicle: data.value });
   }
 
+  handleAttachmentAdded(e, data) {
+    console.log(this)
+    var attachments = this.state.attachments
+    attachments.push(data.attachmentId)
+
+    this.setState({ attachments: attachments });
+  }
+
   handleSubmit(e) {
     // Prevent browser refresh
     e.preventDefault();
@@ -126,8 +136,11 @@ class FormActivity extends Component {
       client: this.state.client,
       vehicle: this.state.vehicle,
       kilometrage: this.state.kilometrage,
-      log: this.state.log
+      log: this.state.log,
+      attachments: this.state.attachments,
     }
+
+    console.log(activity)
 
     // Acknowledge that if the activity id is provided, we're updating via PUT
     // Otherwise, we're creating a new data via POST
@@ -211,7 +224,7 @@ class FormActivity extends Component {
           label='Client'
           name='client'
           required
-          disabled={this.state.isLoadingClient || this.props.clientID || this.props.activityID}
+          disabled={this.state.isLoadingClient || this.props.clientID != undefined || this.props.activityID != undefined}
           loading={this.state.isLoadingClient}
           options={clientOptions}
           value={this.state.client}
@@ -220,7 +233,7 @@ class FormActivity extends Component {
         <Form.Select
           label='Vehicle'
           name='vehicle'
-          disabled={this.state.isLoadingVehicle || this.props.vehicleID}
+          disabled={this.state.isLoadingVehicle || this.props.vehicleID != undefined}
           loading={this.state.isLoadingVehicle}
           options={vehicleOptions}
           value={this.state.vehicle}
@@ -246,22 +259,27 @@ class FormActivity extends Component {
         <AttachmentInput
           label='Attachments'
           name='attachments'
+          attachments={this.state.attachments}
+          onAttachmentAdded={this.handleAttachmentAdded.bind(this)}
         />
+
+        <Divider/>
         
         <Message
-          success
-          color='green'
-          header='Work log created!'
-          content={formSuccessMessage}
-        />
-        <Message
-          warning
-          color='yellow'
-          header='Uh Oh!'
-          content={formErrorMessage}
-        />
-        <Button color={this.props.buttonColor} floated='right'>{this.props.buttonSubmitTitle}</Button>
-        <br /><br /> {/* Yikes! Deal with Semantic UI React! */}
+            success
+            color='green'
+            header='Success'
+            content={formSuccessMessage}
+          />
+          <Message
+            warning
+            color='yellow'
+            header='Yikes!'
+            content={formErrorMessage}
+          />
+          
+          <Button color={this.props.buttonColor}>{this.props.buttonSubmitTitle}</Button>
+        
       </Form>
     );
   }

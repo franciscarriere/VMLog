@@ -74,6 +74,7 @@ router.post('/', postLimiter, (req, res) => {
     vehicle: req.body.vehicle,
     kilometrage: req.body.kilometrage,
     log: req.body.log,
+    attachments: req.body.attachments,
   });
 
   newActivity.save()
@@ -86,7 +87,8 @@ router.post('/', postLimiter, (req, res) => {
           client: result.client,
           vehicle: result.vehicle,
           kilometrage: result.kilometrage,
-          log: result.log
+          log: result.log,
+          attachments: result.attachments,
         }
       });
     })
@@ -106,6 +108,7 @@ router.put('/:id', (req, res) => {
     vehicle: req.body.vehicle,
     kilometrage: req.body.kilometrage,
     log: req.body.log,
+    attachments: req.body.attachments,
   };
 
   Activity.findOneAndUpdate({ _id: req.params.id }, updatedActivity, { runValidators: true, context: 'query' })
@@ -120,7 +123,8 @@ router.put('/:id', (req, res) => {
               client: newResult.client,
               vehicle: newResult.vehicle,
               kilometrage: newResult.kilometrage,
-              log: newResult.log
+              log: newResult.log,
+              attachments: newResult.attachments
             }
           });
         })
@@ -150,7 +154,8 @@ router.delete('/:id', (req, res) => {
           client: result.client,
           vehicle: result.vehicle,
           kilometrage: result.kilometrage,
-          log: result.log
+          log: result.log,
+          attachments: result.attachments
         }
       });
     })

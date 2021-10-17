@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Label, Segment } from 'semantic-ui-react';
+import { Grid, Label, Segment, Button, Image, Divider } from 'semantic-ui-react';
 import axios from 'axios';
 
 class AttachmentInput extends React.Component {
@@ -12,6 +12,7 @@ class AttachmentInput extends React.Component {
     uploadFile = event => {
         var uploadFiles = Array.from(event.target.files);
         var uploadURL = `${this.server}/api/attachments`
+        var attachmentAddedCB = this.props.onAttachmentAdded
 
         uploadFiles.forEach(async function(file) {
             console.log(file)
@@ -24,29 +25,54 @@ class AttachmentInput extends React.Component {
                 formData,
                 { headers: { 'content-type': 'multipart/form-data' } }
             ).then( data => {
-                    console.log('file uploaded')
-                    console.log(data)
-                }).catch(e => {
+                console.log('File uploaded.')
+                attachmentAddedCB(event, data.data)
+            }).catch(e => {
                     alert('Failed to upload attachment ' + file.name + '\n' + e)
                     console.log(e)
-                })
+            })
         })
+    }
+
+    handleAddAttachmentClick(e) {
+        e.preventDefault();
+
+        var event = new MouseEvent('click', {
+            'view': window, 
+            'bubbles': true, 
+            'cancelable': false
+        });
+        var node = document.getElementById('file');
+        node.dispatchEvent(event);
     }
     
     render() {
+    const attachmentColumns = this.props.attachments.map( (att, i) =>
+        <Grid.Column key={i}>
+            <Image src={'http://localhost:3200/uploads/'+att} onError={(e)=>{e.target.onerror = null; e.target.src="http://localhost:3200/file-default.png"}} bordered />
+        </Grid.Column>
+     );
+
       return (        
         <div>
-            <Grid columns={1}>
-                <Grid.Column>
-                <Segment>
-                    <Label color='black' ribbon>
-                    Attachments
-                    </Label>
-                    
-                    <input type="file" id="file" name="filename" onChange={this.uploadFile} multiple/>
-                </Segment>
-                </Grid.Column>
-            </Grid>
+            <input type="file" id="file" name="filename" onChange={this.uploadFile} multiple hidden/>
+
+            <Segment>
+                <Label color='black' ribbon>
+                Attachments
+                </Label>    
+            
+                <Divider/>
+
+                <Grid columns={4}>
+                   {attachmentColumns}
+                </Grid>
+
+                <Divider/>
+                
+                <Button positive onClick={this.handleAddAttachmentClick}>Add Attachment</Button>
+            </Segment>
+            
         </div>
       );
     }

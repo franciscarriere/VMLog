@@ -36,7 +36,8 @@ const app = express();
 app.enable('trust proxy');
 
 // Set public folder using built-in express.static middleware
-app.use(express.static('public'));
+app.use("/", express.static(__dirname + '/public'));
+app.use("/uploads", express.static(__dirname + '/public/uploads'));
 
 // Set body parser middleware
 app.use(bodyParser.json());

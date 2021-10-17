@@ -25,7 +25,7 @@ const postLimiter = new RateLimit({
 router.post('/', (req, res) => {
   const form = formidable.IncomingForm();
 
-  const uploadFolder = path.join(__dirname, "../public", "attachments");
+  const uploadFolder = path.join(__dirname, "../public", "uploads");
   form.uploadDir = uploadFolder;
 
   form.parse(req, async (err, fields, files) => {
@@ -39,18 +39,15 @@ router.post('/', (req, res) => {
     }
 
     const file = files.file;
-    const fileName = uuid.v4()
-    console.log(file);
+    const fileName = uuid.v4() + path.extname(file.name)
     
     try { 
         fs.renameSync(file.path, path.join(uploadFolder, fileName));
     } catch (error) {
         console.log(error);
     }
-
-    //TODO let parent know of new attachment
-
-    return res.status(200);
+    
+    return res.status(200).json({attachmentId:fileName});
   });
 })
 

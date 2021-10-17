@@ -55,7 +55,7 @@ class AttachmentInput extends React.Component {
     render() {
     const attachmentColumns = this.props.attachments.map( (att, i) =>
         <Grid.Column key={i}>
-            <Image src={'http://localhost:3200/uploads/'+att} onError={(e)=>{e.target.onerror = null; e.target.src="http://localhost:3200/file-default.png"}} bordered />
+            <Image href={'http://localhost:3200/uploads/'+att} src={'http://localhost:3200/uploads/'+att} onError={(e)=>{e.target.onerror = null; e.target.src="http://localhost:3200/file-default.png"}} bordered />
             <Button negative circular size='mini' className="delAttachmentButton" data-attId={att} onClick={this.handleRemoveAttachmentClick.bind(this)} >X</Button>
         </Grid.Column>
      );

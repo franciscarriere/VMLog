@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Message, Button, Form, Select, TextArea } from 'semantic-ui-react';
 import axios from 'axios';
 import io from 'socket.io-client';
+import AttachmentInput from '../Attachments/AttachmentInput';
 
 class FormActivity extends Component {
 
@@ -34,7 +35,7 @@ class FormActivity extends Component {
     // Fill in the form with the appropriate data if client id is provided
 
     if (this.props.activityID) {
-      axios.get(`${this.props.server}/api/activities/${this.props.activityID}`)
+      axios.get(`${this.server}/api/activities/${this.props.activityID}`)
       .then((response) => {
         this.setState({
           client: response.data.client,
@@ -136,7 +137,7 @@ class FormActivity extends Component {
     axios({
       method: method,
       responseType: 'json',
-      url: `${this.props.server}/api/activities/${params}`,
+      url: `${this.server}/api/activities/${params}`,
       data: activity
     })
     .then((response) => {
@@ -153,11 +154,11 @@ class FormActivity extends Component {
           log: '',
         });
         this.props.onActivityAdded(response.data.result);
-        this.props.socket.emit('add', response.data.result);
+        this.socket.emit('add', response.data.result);
       }
       else {
         this.props.onActivityUpdated(response.data.result);
-        this.props.socket.emit('update', response.data.result);
+        this.socket.emit('update', response.data.result);
       }
       
     })
@@ -241,6 +242,10 @@ class FormActivity extends Component {
           required
           value={this.state.log}
           onChange={this.handleInputChange}
+        />
+        <AttachmentInput
+          label='Attachments'
+          name='attachments'
         />
         
         <Message

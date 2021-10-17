@@ -3,6 +3,7 @@ const router = express.Router();
 const RateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const stringCapitalizeName = require('string-capitalize-name');
+const formidable = require("formidable");
 
 const Activity = require('../models/activity');
 

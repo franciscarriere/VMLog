@@ -51,6 +51,7 @@ if (process.env.CORS) {
 app.use('/api/clients', require('./routes/clients'));
 app.use('/api/vehicles', require('./routes/vehicles'));
 app.use('/api/activities', require('./routes/activities'));
+app.use('/api/attachments', require('./routes/attachments'));
 
 // Use express's default error handling middleware
 app.use((err, req, res, next) => {

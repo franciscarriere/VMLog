@@ -19,7 +19,10 @@ const ActivitySchema = new mongoose.Schema({
   log: { 
     type: String,
     required: false
-  }
+  },
+  attachments: [{
+    type:String
+  }],
 }, { timestamps: true });
 
 // Use the unique validator plugin

@@ -22,16 +22,6 @@ const emailValidator = [
   })
 ];
 
-const phoneValidator = [
-  validate({
-    validator: function(v) {
-      //TODO expand this for international numbers
-      return /\d{3}-\d{3}-\d{4}/.test(v);
-    },
-    message: props => `${props.value} is not a valid phone number!`
-  })
-]
-
 // Define the database model
 const ClientSchema = new mongoose.Schema({
   name: {
@@ -48,8 +38,7 @@ const ClientSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: [true, 'Phone No. is required.'],
-    unique: true,
-    validate: phoneValidator
+    unique: true
   }
 }, { timestamps: true });
 

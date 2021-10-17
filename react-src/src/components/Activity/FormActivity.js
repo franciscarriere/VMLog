@@ -121,9 +121,15 @@ class FormActivity extends Component {
   }
 
   handleAttachmentAdded(e, data) {
-    console.log(this)
     var attachments = this.state.attachments
     attachments.push(data.attachmentId)
+
+    this.setState({ attachments: attachments });
+  }
+
+  handleAttachmentRemoved(e, data) {
+    var attachments = this.state.attachments
+    attachments = attachments.filter(item => item !== data.attachmentId)
 
     this.setState({ attachments: attachments });
   }
@@ -261,6 +267,7 @@ class FormActivity extends Component {
           name='attachments'
           attachments={this.state.attachments}
           onAttachmentAdded={this.handleAttachmentAdded.bind(this)}
+          onAttachmentRemoved={this.handleAttachmentRemoved.bind(this)}
         />
 
         <Divider/>

@@ -10,3 +10,12 @@ body {
   display: inline-block !important;
   position: relative;
 }
+
+/* Attachment Delete Button */
+.delAttachmentButton {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 7px !important;
+  opacity: 0.8;
+}

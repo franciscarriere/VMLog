@@ -34,9 +34,15 @@ class AttachmentInput extends React.Component {
         })
     }
 
+    handleRemoveAttachmentClick(e) {
+        e.preventDefault();
+        this.props.onAttachmentRemoved(e, {attachmentId: e.target.getAttribute('data-attId')})
+    }
+
     handleAddAttachmentClick(e) {
         e.preventDefault();
 
+        //Open the File selector
         var event = new MouseEvent('click', {
             'view': window, 
             'bubbles': true, 
@@ -50,6 +56,7 @@ class AttachmentInput extends React.Component {
     const attachmentColumns = this.props.attachments.map( (att, i) =>
         <Grid.Column key={i}>
             <Image src={'http://localhost:3200/uploads/'+att} onError={(e)=>{e.target.onerror = null; e.target.src="http://localhost:3200/file-default.png"}} bordered />
+            <Button negative circular size='mini' className="delAttachmentButton" data-attId={att} onClick={this.handleRemoveAttachmentClick.bind(this)} >X</Button>
         </Grid.Column>
      );
 
